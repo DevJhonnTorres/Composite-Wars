@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Composite Wars ⚔️</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="game-header">
+    <h1>⚔️ Composite Wars</h1>
+    <nav class="phase-nav">
+      <button class="phase-btn" data-phase="1">Fase 1: Unidades</button>
+      <button class="phase-btn" data-phase="2">Fase 2: Grupos</button>
+      <button class="phase-btn" data-phase="3">Fase 3: Jerarquías</button>
+      <button class="phase-btn" data-phase="4">Fase 4: Ejército</button>
+    </nav>
+  </header>
+
+  <main class="game-layout">
+    <!-- Panel izquierdo: misión activa + paleta de unidades -->
+    <aside class="sidebar">
+      <section id="mission-display" class="mission-panel"></section>
+      <section class="palette-section">
+        <h2>🪖 Unidades Disponibles</h2>
+        <p class="drag-hint">Arrastra las unidades al árbol →</p>
+        <div id="unit-palette" class="unit-palette"></div>
+      </section>
+    </aside>
+
+    <!-- Panel central: árbol jerárquico -->
+    <section class="center-panel">
+      <h2>🌲 Estructura del Ejército</h2>
+      <div id="tree-panel" class="tree-panel drop-target" data-unit-id="root"></div>
+    </section>
+
+    <!-- Panel derecho: acciones + log -->
+    <aside class="sidebar sidebar--right">
+      <div id="action-panel" class="action-panel"></div>
+    </aside>
+  </main>
+
+  <!-- Overlay educativo flotante -->
+  <div id="edu-overlay" class="edu-overlay"></div>
+
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>

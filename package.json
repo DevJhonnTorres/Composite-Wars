@@ -1,0 +1,18 @@
+{
+  "name": "composite-wars",
+  "version": "1.0.0",
+  "description": "Juego educativo interactivo para aprender el patrón de diseño Composite",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "build": "echo 'Static site — no build needed'",
+    "start": "npx serve ."
+  },
+  "devDependencies": {
+    "@babel/core": "^7.24.0",
+    "@babel/preset-env": "^7.24.0",
+    "babel-jest": "^29.7.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0"
+  }
+}
