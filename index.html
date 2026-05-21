@@ -3,45 +3,300 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Composite Wars ⚔️</title>
+  <title>COMPOSITE WARS // Análisis de Algoritmos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="game-header">
-    <h1>⚔️ Composite Wars</h1>
-    <nav class="phase-nav">
-      <button class="phase-btn" data-phase="1">Fase 1: Unidades</button>
-      <button class="phase-btn" data-phase="2">Fase 2: Grupos</button>
-      <button class="phase-btn" data-phase="3">Fase 3: Jerarquías</button>
-      <button class="phase-btn" data-phase="4">Fase 4: Ejército</button>
-    </nav>
-  </header>
 
-  <main class="game-layout">
-    <!-- Panel izquierdo: misión activa + paleta de unidades -->
-    <aside class="sidebar">
-      <section id="mission-display" class="mission-panel"></section>
-      <section class="palette-section">
-        <h2>🪖 Unidades Disponibles</h2>
-        <p class="drag-hint">Arrastra las unidades al árbol →</p>
-        <div id="unit-palette" class="unit-palette"></div>
+  <!-- ══════════════════════════════════════════════════
+       SPLASH SCREEN
+  ══════════════════════════════════════════════════ -->
+  <div id="splash" class="splash">
+    <canvas id="matrix-canvas" class="splash__canvas"></canvas>
+    <div class="splash__scanlines"></div>
+
+    <div class="splash__content">
+      <div class="splash__sys-tag">
+        SYS_BOOT: COMPOSITE_ENGINE_v1.0 &nbsp;|&nbsp; STATUS: OPERATIVO
+      </div>
+
+      <div class="splash__logo-wrap">
+        <h1 class="splash__title" id="splash-title" data-glitch="COMPOSITE WARS">
+          COMPOSITE WARS
+        </h1>
+        <p class="splash__subtitle">PATTERN DESIGN ENGINE // DESIGN PATTERNS</p>
+      </div>
+
+      <div class="splash__meta">
+        <div class="splash__course">
+          ─── PROYECTO FINAL &nbsp;/&nbsp; ANÁLISIS DE ALGORITMOS ───
+        </div>
+
+        <div class="splash__authors">
+          <div class="splash__author">
+            <span class="splash__author-idx">01</span>
+            <span class="splash__author-name">TORRES CASTRO, JHONN ALEXANDER</span>
+          </div>
+          <div class="splash__author">
+            <span class="splash__author-idx">02</span>
+            <span class="splash__author-name">LOZADA LERMA, DANIEL ESTEBAN</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="splash__loader">
+        <div class="splash__bar">
+          <div class="splash__bar-fill" id="loader-fill"></div>
+        </div>
+        <span class="splash__loader-text" id="loader-text">SYS_INIT: CARGANDO MÓDULOS...</span>
+      </div>
+
+      <button class="splash__cta" id="splash-cta" disabled>
+        [ INICIAR MISIÓN &nbsp;→ ]
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       TUTORIAL / BRIEFING SCREEN
+  ══════════════════════════════════════════════════ -->
+  <div id="tutorial" class="tutorial hidden">
+    <div class="tutorial__scanlines"></div>
+
+    <div class="tutorial__inner">
+      <div class="tutorial__header">
+        <div class="tutorial__sys">// MISSION_BRIEFING // COMPOSITE_PATTERN</div>
+        <h2 class="tutorial__title">¿QUÉ VAS A APRENDER?</h2>
+        <p class="tutorial__intro">
+          El <strong>patrón Composite</strong> permite tratar objetos individuales y grupos de objetos
+          de manera <strong>uniforme</strong>, construyendo estructuras jerárquicas tipo árbol.
+          Leaf y Composite implementan la misma interfaz — el cliente no distingue entre ellos.
+        </p>
+
+        <div class="tutorial__uml">
+          <span class="uml-box uml-interface">«interface»<br/>Unidad<br/><em>atacar() / mover()</em></span>
+          <span class="uml-arrow">▼</span>
+          <div class="uml-row">
+            <span class="uml-box uml-leaf">Soldado<br/><em>Leaf</em></span>
+            <span class="uml-box uml-leaf">Médico<br/><em>Leaf</em></span>
+            <span class="uml-box uml-composite">Escuadrón<br/><em>Composite</em><br/>children: Unidad[]</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="tutorial__grid">
+
+        <!-- FASE 01 -->
+        <div class="phase-card">
+          <div class="phase-card__header">
+            <span class="phase-card__num">FASE 01</span>
+            <span class="phase-card__name">LEAF — OBJETOS INDIVIDUALES</span>
+          </div>
+          <div class="phase-card__body">
+            <div class="phase-card__desc">
+              <p><span class="label">CONCEPTO:</span>
+                El <strong>Leaf</strong> es la unidad más básica. No puede contener otros objetos.
+                Actúa de forma completamente independiente. Implementa la interfaz directamente.
+              </p>
+              <p><span class="label">EN EL JUEGO:</span>
+                Arrastra un soldado al árbol. Ejecuta ATACAR.
+                Observa cómo <em>una sola unidad</em> responde.
+              </p>
+              <div class="phase-card__units">
+                🪖 Soldado — 20 dmg &nbsp;|&nbsp; 🚑 Médico — 30 heal &nbsp;|&nbsp; 🚓 Tanque — 50 dmg
+              </div>
+            </div>
+            <div class="phase-card__code">
+              <div class="code-header">// Leaf.java</div>
+              <pre>class Soldado implements Unidad {
+  public void atacar() {
+    // Solo actúa este objeto
+    print("Soldado: 20 dmg");
+  }
+}</pre>
+            </div>
+          </div>
+          <div class="phase-card__tag">⬡ Sin hijos — actúa solo</div>
+        </div>
+
+        <!-- FASE 02 -->
+        <div class="phase-card">
+          <div class="phase-card__header">
+            <span class="phase-card__num">FASE 02</span>
+            <span class="phase-card__name">COMPOSITE — GRUPOS</span>
+          </div>
+          <div class="phase-card__body">
+            <div class="phase-card__desc">
+              <p><span class="label">CONCEPTO:</span>
+                El <strong>Composite</strong> contiene múltiples objetos.
+                Cuando ejecutas una acción, la <em>delega automáticamente</em>
+                a todos sus hijos. El cliente lo usa igual que un Leaf.
+              </p>
+              <p><span class="label">EN EL JUEGO:</span>
+                El campo ya tiene un grupo. Arrastra ≥2 unidades dentro.
+                Ejecuta ATACAR — todos responden a la vez.
+              </p>
+            </div>
+            <div class="phase-card__code">
+              <div class="code-header">// Composite.java</div>
+              <pre>class Escuadron implements Unidad {
+  List&lt;Unidad&gt; hijos;
+
+  public void atacar() {
+    for (Unidad u : hijos)
+      u.atacar(); // ← delega
+  }
+}</pre>
+            </div>
+          </div>
+          <div class="phase-card__tag">⬡ Contiene otros objetos</div>
+        </div>
+
+        <!-- FASE 03 -->
+        <div class="phase-card">
+          <div class="phase-card__header">
+            <span class="phase-card__num">FASE 03</span>
+            <span class="phase-card__name">ÁRBOL — JERARQUÍAS ANIDADAS</span>
+          </div>
+          <div class="phase-card__body">
+            <div class="phase-card__desc">
+              <p><span class="label">CONCEPTO:</span>
+                Los Composite pueden contener <em>otros Composite</em>,
+                formando un <strong>árbol</strong>. Cada nivel puede tener hijos
+                de cualquier tipo — Leaf o Composite — sin restricciones.
+              </p>
+              <p><span class="label">EN EL JUEGO:</span>
+                Usa "📦 Crear Grupo" para anidar grupos dentro de grupos.
+                Observa el árbol jerárquico que se construye en tiempo real.
+              </p>
+            </div>
+            <div class="phase-card__code">
+              <div class="code-header">// Estructura árbol</div>
+              <pre>Ejército            ← root
+ ├── Batallón Norte  ← Composite
+ │    ├── Escuadrón A← Composite
+ │    │    ├── 🪖    ← Leaf
+ │    │    └── 🪖    ← Leaf
+ │    └── 🚓         ← Leaf
+ └── Batallón Sur
+      └── 🚑         ← Leaf</pre>
+            </div>
+          </div>
+          <div class="phase-card__tag">⬡ Composite de Composites</div>
+        </div>
+
+        <!-- FASE 04 -->
+        <div class="phase-card">
+          <div class="phase-card__header">
+            <span class="phase-card__num">FASE 04</span>
+            <span class="phase-card__name">RECURSIVIDAD — UN SOLO COMANDO</span>
+          </div>
+          <div class="phase-card__body">
+            <div class="phase-card__desc">
+              <p><span class="label">CONCEPTO:</span>
+                Con <strong>UNA SOLA llamada</strong> en la raíz, la acción
+                se propaga <em>recursivamente</em> por toda la jerarquía.
+                Leaf y Composite responden idénticamente — eso es el poder del patrón.
+              </p>
+              <p><span class="label">EN EL JUEGO:</span>
+                Construye un ejército con ≥4 unidades anidadas.
+                Ejecuta ATACAR UNA VEZ — observa todos los resultados en el log.
+              </p>
+            </div>
+            <div class="phase-card__code">
+              <div class="code-header">// Ejecución recursiva</div>
+              <pre>ejercito.atacar();
+ ↓ batallon.atacar()
+   ↓ escuadron.atacar()
+     ↓ soldado1.atacar() ✓
+     ↓ soldado2.atacar() ✓
+   ↓ tanque.atacar()    ✓
+ ↓ medico.atacar()     ✓</pre>
+            </div>
+          </div>
+          <div class="phase-card__tag">⬡ O(n) — recorre todo el árbol</div>
+        </div>
+
+      </div><!-- /tutorial__grid -->
+
+      <button class="tutorial__cta" id="tutorial-cta">
+        [ COMENZAR JUEGO &nbsp;→ ]
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════
+       GAME SCREEN
+  ══════════════════════════════════════════════════ -->
+  <div id="game" class="game hidden">
+
+    <header class="game-header">
+      <div class="game-header__brand">
+        <span class="game-header__tag">SYS_ACTIVE</span>
+        <h1 class="game-header__title">COMPOSITE WARS</h1>
+      </div>
+      <nav class="phase-nav">
+        <button class="phase-btn" data-phase="1">
+          <span class="phase-btn__num">01</span>
+          <span class="phase-btn__label">LEAF</span>
+        </button>
+        <button class="phase-btn" data-phase="2">
+          <span class="phase-btn__num">02</span>
+          <span class="phase-btn__label">COMPOSITE</span>
+        </button>
+        <button class="phase-btn" data-phase="3">
+          <span class="phase-btn__num">03</span>
+          <span class="phase-btn__label">ÁRBOL</span>
+        </button>
+        <button class="phase-btn" data-phase="4">
+          <span class="phase-btn__num">04</span>
+          <span class="phase-btn__label">RECURSIVIDAD</span>
+        </button>
+      </nav>
+      <button class="game-header__briefing-btn" id="btn-briefing">[ BRIEFING ]</button>
+    </header>
+
+    <!-- Barra de concepto activo -->
+    <div class="concept-bar" id="concept-bar">
+      <span class="concept-bar__label">CONCEPTO ACTIVO:</span>
+      <span class="concept-bar__value" id="concept-value">LEAF — Los objetos más básicos. Actúan solos, sin contener otros objetos.</span>
+    </div>
+
+    <main class="game-layout">
+      <!-- Panel izquierdo -->
+      <aside class="sidebar">
+        <section id="mission-display" class="mission-panel"></section>
+        <section class="palette-section">
+          <div class="panel-header">
+            <span class="panel-header__tag">UNIDADES</span>
+            <span class="panel-header__hint">— arrastra al árbol →</span>
+          </div>
+          <div id="unit-palette" class="unit-palette"></div>
+        </section>
+      </aside>
+
+      <!-- Panel central -->
+      <section class="center-panel">
+        <div class="panel-header">
+          <span class="panel-header__tag">ÁRBOL JERÁRQUICO</span>
+          <span class="panel-header__hint">— estructura Composite</span>
+        </div>
+        <div id="tree-panel" class="tree-panel drop-target" data-unit-id="root"></div>
       </section>
-    </aside>
 
-    <!-- Panel central: árbol jerárquico -->
-    <section class="center-panel">
-      <h2>🌲 Estructura del Ejército</h2>
-      <div id="tree-panel" class="tree-panel drop-target" data-unit-id="root"></div>
-    </section>
+      <!-- Panel derecho -->
+      <aside class="sidebar sidebar--right">
+        <div id="action-panel" class="action-panel"></div>
+      </aside>
+    </main>
 
-    <!-- Panel derecho: acciones + log -->
-    <aside class="sidebar sidebar--right">
-      <div id="action-panel" class="action-panel"></div>
-    </aside>
-  </main>
-
-  <!-- Overlay educativo flotante -->
-  <div id="edu-overlay" class="edu-overlay"></div>
+    <div id="edu-overlay" class="edu-overlay"></div>
+  </div><!-- /game -->
 
   <script type="module" src="src/main.js"></script>
 </body>
