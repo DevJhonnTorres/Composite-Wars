@@ -88,6 +88,71 @@
         </div>
       </div>
 
+      <!-- Implementación completa -->
+      <div class="tutorial__impl">
+        <div class="tutorial__impl-header">
+          <span class="tutorial__impl-tag">IMPLEMENTACIÓN COMPLETA EN JAVA</span>
+          <span class="tutorial__impl-hint">— el código que ejecuta el juego</span>
+        </div>
+        <div class="tutorial__impl-grid">
+          <div class="impl-block">
+            <div class="code-header">// 1. COMPONENT — Interfaz común</div>
+            <pre>interface Unidad {
+    void atacar();   // ← misma firma
+    void mover();    //    para TODOS
+    void defender(); //    los objetos
+}</pre>
+          </div>
+          <div class="impl-block">
+            <div class="code-header">// 2. LEAF — Objeto básico sin hijos</div>
+            <pre>class Soldado implements Unidad {
+    private int poder = 20;
+
+    @Override
+    public void atacar() {
+        // actúa solo — no delega
+        print("Soldado: " + poder + " dmg");
+    }
+    // mover() y defender() igual...
+}</pre>
+          </div>
+          <div class="impl-block">
+            <div class="code-header">// 3. COMPOSITE — Contiene otros Unidad</div>
+            <pre>class Grupo implements Unidad {
+    List&lt;Unidad&gt; hijos = new ArrayList&lt;&gt;();
+
+    public void agregar(Unidad u)  { hijos.add(u); }
+    public void eliminar(Unidad u) { hijos.remove(u); }
+
+    @Override
+    public void atacar() {
+        // DELEGACIÓN RECURSIVA ←←←
+        for (Unidad hijo : hijos)
+            hijo.atacar(); // Leaf o Composite
+    }
+}</pre>
+          </div>
+          <div class="impl-block">
+            <div class="code-header">// 4. CLIENTE — Usa la interfaz Unidad</div>
+            <pre>Unidad s1  = new Soldado("S1"); // Leaf
+Unidad med = new Medico("M1");  // Leaf
+
+Grupo alpha = new Grupo("Alpha");
+alpha.agregar(s1);   // añadir Leaf
+alpha.agregar(med);  // añadir Leaf
+
+Grupo ejercito = new Grupo("Ejercito");
+ejercito.agregar(alpha);         // Composite
+ejercito.agregar(new Tanque());  // Leaf
+
+// ¡Misma línea de código para ambos!
+s1.atacar();        // Leaf:      1 respuesta
+alpha.atacar();     // Composite: 2 respuestas
+ejercito.atacar();  // Composite: 3 respuestas</pre>
+          </div>
+        </div>
+      </div>
+
       <div class="tutorial__grid">
 
         <!-- FASE 01 -->
@@ -296,6 +361,12 @@
     </main>
 
     <div id="edu-overlay" class="edu-overlay"></div>
+
+    <!-- ── Terminal de código en vivo ─────────────────────────── -->
+    <div class="code-terminal">
+      <div id="code-panel" class="code-terminal__body"></div>
+    </div>
+
   </div><!-- /game -->
 
   <script type="module" src="src/main.js"></script>

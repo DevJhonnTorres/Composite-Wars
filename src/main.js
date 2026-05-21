@@ -5,6 +5,7 @@ import { UnitPalette }      from './ui/UnitPalette.js';
 import { ActionPanel }      from './ui/ActionPanel.js';
 import { EducationOverlay } from './ui/EducationOverlay.js';
 import { DragDrop }         from './ui/DragDrop.js';
+import { CodePanel }        from './ui/CodePanel.js';
 
 // ─── Conceptos por fase ──────────────────────────────────────────
 const PHASE_CONCEPTS = {
@@ -171,15 +172,20 @@ document.addEventListener('DOMContentLoaded', () => {
   const actionPanel = new ActionPanel(
     document.getElementById('action-panel'), state, missions, eduOverlay
   );
-  const dragDrop = new DragDrop(state, () => { treePanel.render(); palette.render(); });
+  const codePanel = new CodePanel(document.getElementById('code-panel'), state);
+  const dragDrop  = new DragDrop(state, () => { treePanel.render(); palette.render(); codePanel.showLive(); });
 
   dragDrop.bind(gameEl);
 
   state.subscribe((event, data) => {
-    if (event === 'army-changed')  treePanel.render();
+    if (event === 'army-changed')  { treePanel.render(); codePanel.showLive(); }
     if (event === 'phase-changed') {
-      treePanel.render(); palette.render(); actionPanel.render();
+      treePanel.render(); palette.render(); actionPanel.render(); codePanel.showLive();
       _updateConceptBar(data.phase);
+    }
+    if (event === 'action-executed') {
+      codePanel._lastAction = data.action;
+      codePanel.showTrace(data.action);
     }
     if (event === 'mission-completed') {
       const m = missions.getMission(data.missionId);
@@ -237,6 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('[data-phase="1"]').classList.add('active');
   state.initPhase(1);
   actionPanel.render();
+  codePanel.render();
   _renderMission();
   _updateConceptBar(1);
 });
