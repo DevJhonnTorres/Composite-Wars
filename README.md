@@ -11,6 +11,7 @@
 |---|--------|
 | 01 | Torres Castro, Jhonn Alexander |
 | 02 | Lozada Lerma, Daniel Esteban |
+| 03 | Ceballos Burbano, Daniel Camilo |
 
 ---
 
